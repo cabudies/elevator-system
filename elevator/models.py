@@ -18,13 +18,13 @@ class Elevator(models.Model):
 
     elevator_number = models.PositiveSmallIntegerField()
     current_floor = models.PositiveSmallIntegerField()
-    current_status = models.IntegerField(choices=enums.ElevatorRunningStatus.choices,default=0)
+    current_status = models.IntegerField(choices=enums.ElevatorRunningStatus.choices, default=0)
     is_operational = models.BooleanField(default=True)
 
 
 class ElevatorRequest(models.Model):
     ## (fk-elevator, requested_floor)
-    elevator_system = models.ForeignKey(Elevator, on_delete=models.CASCADE)
+    elevator = models.ForeignKey(Elevator, on_delete=models.CASCADE)
 
     requested_floor = models.PositiveSmallIntegerField()
 

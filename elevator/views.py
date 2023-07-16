@@ -16,7 +16,6 @@ class ElevatorSystemViewSet(ModelViewSet):
     
     def list(self, request):
         serializer = serializers.ElevatorSystemSerializer(self.queryset, many=True)
-        print("serializer list=======")
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -32,4 +31,53 @@ class ElevatorSystemViewSet(ModelViewSet):
             serializer.data, 
             status=status.HTTP_201_CREATED
         )
+
+
+class ElevatorViewSet(ModelViewSet):
+    queryset = models.Elevator.objects.all()
+    serializer_class = serializers.ElevatorSerializer
+    permission_classes = (AllowAny,)
     
+    def list(self, request):
+        serializer = serializers.ElevatorSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        item = get_object_or_404(self.queryset, pk=pk)
+        serializer = serializers.ElevatorSerializer(item)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(
+            serializer.data, 
+            status=status.HTTP_201_CREATED
+        )
+
+
+class ElevatorRequestViewSet(ModelViewSet):
+    queryset = models.ElevatorRequest.objects.all()
+    serializer_class = serializers.ElevatorRequestSerializer
+    permission_classes = (AllowAny,)
+    
+    def list(self, request):
+        serializer = serializers.ElevatorRequestSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        item = get_object_or_404(self.queryset, pk=pk)
+        serializer = serializers.ElevatorRequestSerializer(item)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(
+            serializer.data, 
+            status=status.HTTP_201_CREATED
+        )
+
+
