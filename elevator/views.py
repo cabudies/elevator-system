@@ -7,6 +7,10 @@ from rest_framework import status
 
 from . import models, enums, serializers
 
+'''
+    Viewsets for basic crud operations for all the 3 modules
+'''
+
 
 class ElevatorSystemViewSet(ModelViewSet):
     queryset = models.ElevatorSystem.objects.all()
@@ -130,7 +134,11 @@ class ElevatorRequestViewSet(ModelViewSet):
         elevator_details = self.get_specified_elevator_details(
             elevator_id=request.data["elevator"]
         )
-        
+
+        '''
+            if the elevator is not operational or the requested elevator does not
+            exists, raise error
+        '''
         if elevator_details is None:
             return Response(
                 {

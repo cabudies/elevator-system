@@ -4,6 +4,9 @@ from . import enums
 
 
 class ElevatorSystem(models.Model):
+    '''
+        DB design for Elevator Design
+    '''
     ## required set of fields (building_name, building_city, building_state, number_of_floors, elevators_count)
     building_name = models.CharField(max_length = 100)
     building_city = models.CharField(max_length = 100)
@@ -13,6 +16,9 @@ class ElevatorSystem(models.Model):
 
 
 class Elevator(models.Model):
+    '''
+        DB design for elevator
+    '''
     ## (fk-elevator system id, elevator_number, current_floor, current_status(enum), is_operational)
     elevator_system = models.ForeignKey(ElevatorSystem, on_delete=models.CASCADE)
 
@@ -23,6 +29,9 @@ class Elevator(models.Model):
 
 
 class ElevatorRequest(models.Model):
+    '''
+        DB design for elevator Request
+    '''
     ## (fk-elevator, requested_floor)
     elevator = models.ForeignKey(Elevator, on_delete=models.CASCADE)
 
