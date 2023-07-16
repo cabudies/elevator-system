@@ -10,3 +10,8 @@ class ElevatorSystemAdmin(admin.ModelAdmin):
 @admin.register(models.Elevator)
 class ElevatorAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.ElevatorRequest)
+class ElevatorRequestAdmin(admin.ModelAdmin):
+    pass
