@@ -63,6 +63,21 @@ class ElevatorViewSet(ModelViewSet):
             serializer.data, 
             status=status.HTTP_201_CREATED
         )
+    
+
+    def update(self, request, pk=None, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.serializer_class(
+            instance=instance,
+            data=request.data,
+            context={},
+            partial=True
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ElevatorRequestViewSet(ModelViewSet):
@@ -81,8 +96,13 @@ class ElevatorRequestViewSet(ModelViewSet):
     
     def get_specified_elevator_details(self, elevator_id):
         elevator_records = models.Elevator.objects.filter(
-            id=elevator_id
+            id=elevator_id,
+            is_operational=True
         )
+
+        if len(elevator_records) == 0:
+            return None
+
         elevator_records_serialized = serializers.ElevatorSerializer(elevator_records[0])
         
         result = elevator_records_serialized.data
@@ -111,6 +131,14 @@ class ElevatorRequestViewSet(ModelViewSet):
             elevator_id=request.data["elevator"]
         )
         
+        if elevator_details is None:
+            return Response(
+                {
+                    "error": "The given elevator is either invalid or not operational at the moment."
+                }, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         elevator_system_details = self.get_specified_elevator_system_details(
             elevator_system_id=elevator_details["elevator_system"]
         )
